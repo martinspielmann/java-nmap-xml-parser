@@ -1,3 +1,5 @@
 package de.martinspielmnann.nmapxmlparser.elements;
 
-public record ExtraPorts(String filtered, Long count, ExtraReasons extraReasons) {}
+import java.util.List;
+
+public record ExtraPorts(String filtered, Long count, List<ExtraReasons> extraReasons) {}

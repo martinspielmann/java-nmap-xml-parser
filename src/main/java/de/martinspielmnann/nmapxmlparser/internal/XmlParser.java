@@ -15,6 +15,7 @@ import org.xml.sax.SAXException;
 
 import de.martinspielmnann.nmapxmlparser.elements.Address;
 import de.martinspielmnann.nmapxmlparser.elements.Debugging;
+import de.martinspielmnann.nmapxmlparser.elements.Elem;
 import de.martinspielmnann.nmapxmlparser.elements.ExtraPorts;
 import de.martinspielmnann.nmapxmlparser.elements.ExtraReasons;
 import de.martinspielmnann.nmapxmlparser.elements.Finished;
@@ -33,9 +34,11 @@ import de.martinspielmnann.nmapxmlparser.elements.PortUsed;
 import de.martinspielmnann.nmapxmlparser.elements.Ports;
 import de.martinspielmnann.nmapxmlparser.elements.RunStats;
 import de.martinspielmnann.nmapxmlparser.elements.ScanInfo;
+import de.martinspielmnann.nmapxmlparser.elements.Script;
 import de.martinspielmnann.nmapxmlparser.elements.Service;
 import de.martinspielmnann.nmapxmlparser.elements.State;
 import de.martinspielmnann.nmapxmlparser.elements.Status;
+import de.martinspielmnann.nmapxmlparser.elements.Table;
 import de.martinspielmnann.nmapxmlparser.elements.TcpSequence;
 import de.martinspielmnann.nmapxmlparser.elements.TcpTsSequence;
 import de.martinspielmnann.nmapxmlparser.elements.Times;
@@ -189,8 +192,11 @@ public class XmlParser {
 		validateNodeName(el, "extraports");
 		var countString = el.getAttribute("count");
 		var count = Long.parseLong(countString);
-		var extraReasonsElement = getSingleChildElement(el, "extrareasons");
-		var extraReasons = parseExtraReasons(extraReasonsElement);
+		var extraReasons = new ArrayList<ExtraReasons>();
+		var extraReasonsElement = el.getElementsByTagName("extrareasons");
+		for (int j = 0; j < extraReasonsElement.getLength(); j++) {
+			extraReasons.add(parseExtraReasons((Element) extraReasonsElement.item(j)));
+		}
 		return new ExtraPorts(el.getAttribute("filtered"), count, extraReasons);
 	}
 
@@ -226,11 +232,61 @@ public class XmlParser {
 			return null;
 		}
 		validateNodeName(el, "port");
-		var portIdString = el.getAttribute("portid");
-		var portId = Long.parseLong(portIdString);
+		var portId = Long.parseLong(el.getAttribute("portid"));
 		var stateElement = getSingleChildElement(el, "state");
 		var serviceElement = getSingleChildElement(el, "service");
-		return new Port(el.getAttribute("protocol"), portId, parseState(stateElement), parseService(serviceElement));
+		var scriptElement = el.getElementsByTagName("script");
+		var scripts = new ArrayList<Script>();
+		for (int i = 0; i < scriptElement.getLength(); i++) {
+			scripts.add(parseScript((Element) scriptElement.item(i)));
+		}
+		return new Port(el.getAttribute("protocol"), portId, parseState(stateElement), parseService(serviceElement),
+				scripts);
+	}
+
+	private static Script parseScript(Element el) {
+		if (el == null) {
+			return null;
+		}
+		validateNodeName(el, "script");
+		var elems = new ArrayList<Elem>();
+		var elemElement = el.getElementsByTagName("elem");
+		for (int i = 0; i < elemElement.getLength(); i++) {
+			elems.add(parseElem((Element) elemElement.item(i)));
+		}
+		var tables = new ArrayList<Table>();
+		var tableElement = el.getElementsByTagName("table");
+		for (int i = 0; i < tableElement.getLength(); i++) {
+			tables.add(parseTable((Element) tableElement.item(i)));
+		}
+
+		return new Script(el.getAttribute("id"), el.getAttribute("output"), elems, tables);
+	}
+
+	private static Table parseTable(Element el) {
+		if (el == null) {
+			return null;
+		}
+		validateNodeName(el, "table");
+		var elems = new ArrayList<Elem>();
+		var elemElement = el.getElementsByTagName("elem");
+		for (int i = 0; i < elemElement.getLength(); i++) {
+			elems.add(parseElem((Element) elemElement.item(i)));
+		}
+		var tables = new ArrayList<Table>();
+		var tableElement = el.getElementsByTagName("table");
+		for (int i = 0; i < tableElement.getLength(); i++) {
+			tables.add(parseTable((Element) tableElement.item(i)));
+		}
+		return new Table(el.getAttribute("key"), elems, tables);
+	}
+
+	private static Elem parseElem(Element el) {
+		if (el == null) {
+			return null;
+		}
+		validateNodeName(el, "elem");
+		return new Elem(el.getAttribute("key"), el.getTextContent());
 	}
 
 	private static OS parseOS(Element el) {

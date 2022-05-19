@@ -42,6 +42,15 @@ class XmlParserTest {
 	}
 
 	@Test
+	void testParseScriptKey() throws ParserConfigurationException, SAXException, IOException {
+		NmapRun nmapRun = XmlParser.parse(getXmlOutputWithScript());
+		assertEquals("FourOhFourRequest",
+				nmapRun.hosts().get(0).ports().ports().get(1).scripts().get(0).elems().get(0).key());
+		assertEquals("dns.google",
+				nmapRun.hosts().get(0).ports().ports().get(1).scripts().get(2).tables().get(0).elems().get(0).value());
+	}
+
+	@Test
 	void testParseOsClassCpe() throws ParserConfigurationException, SAXException, IOException {
 		NmapRun nmapRun = XmlParser.parse(getXmlOutputWithOs());
 		assertEquals("cpe:/o:freebsd:freebsd:9.1",

@@ -13,16 +13,16 @@ import de.martinspielmnann.nmapxmlparser.internal.XmlParser;
 
 public class NmapXmlParser {
 
-	public NmapRun parse(Path pathToXml) throws IOException, NmapParserException {
-		return parse(Files.readString(pathToXml));
-	}
+  public NmapRun parse(Path pathToXml) throws IOException, NmapParserException {
+    return parse(Files.readString(pathToXml));
+  }
 
-	public NmapRun parse(String xmlAsString) throws NmapParserException {
-		try {
-			return XmlParser.parse(xmlAsString);
-		} catch (ParserConfigurationException | SAXException | IOException e) {
-			throw new NmapParserException(String.format("Error parsing [%s]", xmlAsString), e);
-		}
-	}
+  public NmapRun parse(String xmlAsString) throws NmapParserException {
+    try {
+      return XmlParser.parse(xmlAsString);
+    } catch (ParserConfigurationException | SAXException | IOException e) {
+      throw new NmapParserException(String.format("Error parsing [%s]", xmlAsString), e);
+    }
+  }
 
 }

@@ -1,0 +1,13 @@
+{
+    "java.configuration.updateBuildConfiguration": "interactive",
+    // number of spaces for a tab
+    "editor.tabSize": 2,
+
+    // insert spaces when pressing tab
+    "editor.insertSpaces": true,
+    "java.format.settings.url": ".vscode/java-formatter.xml",
+    "[java]": {
+        "editor.detectIndentation": false
+    }
+
+}

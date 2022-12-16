@@ -19,16 +19,17 @@ The easiest way to install nmapxmlparser is importing it via Maven. It is availa
 <dependency>
   <groupId>de.martinspielmann.nmapxmlparser</groupId>
   <artifactId>nmapxmlparser</artifactId>
-  <version>0.9.0</version>
+  <version>1.0.0</version>
 </dependency>
 ```
 
 ### Usage
 ```java
 // run 'nmap -oX' to get the result in XML format.
-var nmapRunFromString = NmapXmlParser.parse(yourNmapXmlResultAsString);
+var parser = new NmapXmlParser();
+var nmapRunFromString = parser.parse(yourNmapXmlResultAsString);
 
-var nmapRunFromPath = NmapXmlParser.parse(pathToNmapResultXml);
+var nmapRunFromPath = parser.parse(Paths.get("pathToXmlResultFile"));
 
 ```
 

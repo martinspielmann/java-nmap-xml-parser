@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>de.martinspielmann.nmapxmlparser</groupId>
 	<artifactId>nmapxmlparser</artifactId>
-	<version>0.9.1-SNAPSHOT</version>
+	<version>1.0.0</version>
 	<name>nmapxmlparser</name>
 	<description>Dependency free Java library to parse nmap xml output into POJO</description>
 	<properties>
@@ -30,7 +30,7 @@
     <connection>scm:git:git@github.com:martinspielmann/java-nmap-xml-parser.git</connection>
     <developerConnection>scm:git:git@github.com:martinspielmann/java-nmap-xml-parser.git</developerConnection>
     <url>https://github.com/martinspielmann/java-nmap-xml-parser</url>
-    <tag>HEAD</tag>
+    <tag>nmapxmlparser-1.0.0</tag>
   </scm>
 
   <developers>
